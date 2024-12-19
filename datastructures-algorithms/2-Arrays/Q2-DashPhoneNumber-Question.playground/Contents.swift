@@ -24,7 +24,28 @@ import UIKit
  */
 func solution(_ S : String) -> String {
     // do your work here
-    return ""
+    var array = Array(S).filter { $0.isNumber }
+    let count = array.count
+    var groups: [String] = []
+    
+    // stride를 사용하여 3개씩 그룹화 (마지막 2~3개의 요소 제외)
+    for i in stride(from: 0, to: count - (count % 3 == 1 ? 4 : 3), by: 3) {
+        groups.append(String(array[i..<i+3]))
+    }
+    
+    // 마지막 그룹 처리
+    if count % 3 == 1 {
+        // count가 홀수 마지막 4개를 2개씩 나눔
+        let lastPart = array.suffix(4)
+        groups.append(String(lastPart.prefix(2)))
+        groups.append(String(lastPart.suffix(2)))
+    } else {
+        // count가 짝수 남은 2~3개의 요소를 한 그룹으로 추가
+        groups.append(String(array.suffix(count % 3)))
+    }
+    
+    // 그룹을 "-"로 연결
+    return groups.joined(separator: "-")
 }
 
 solution("123456789")           // 123-456-789
